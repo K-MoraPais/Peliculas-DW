@@ -7,6 +7,7 @@
   width: 100%;
   background: black;
   padding-left: 2rem;
+  top: 0;
 
   .title {
     color: #ffffffff;
@@ -25,6 +26,7 @@
       display: block;
       position: relative;
       padding: 0.2em 0;
+      transition: 300ms;
 
       &::after {
         content: '';
@@ -42,21 +44,11 @@
       }
 
       &:hover {
-        animation: green-color-animation 600ms both;
-        // color: #35bd3c;
+        color: #35bd3c;
         &::after {
           transform: scale(1);
         }
       }
     }
-  }
-}
-
-@keyframes green-color-animation {
-  from {
-    color: #ffffff;
-  }
-  to {
-    color: #35bd3c;
   }
 }
