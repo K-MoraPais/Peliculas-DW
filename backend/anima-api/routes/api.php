@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('showById', 'App\Http\Controllers\PeliculaController@showById');
-Route::get('getAll', 'App\Http\Controllers\PeliculaController@getAll');
-Route::post('store', 'App\Http\Controllers\PeliculaController@store');
+Route::get('/balance', 'App\Http\Controllers\ApiController@balance');
+Route::post('/evento', 'App\Http\Controllers\ApiController@handler');
+Route::post('/reset', 'App\Http\Controllers\ApiController@store');
