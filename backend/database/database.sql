@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2021 at 02:44 PM
+-- Generation Time: Aug 06, 2021 at 04:22 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.3.29
 
@@ -32,6 +32,14 @@ CREATE TABLE `accounts` (
   `balance` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`accountId`, `balance`) VALUES
+(1, 0),
+(3, 100);
+
 -- --------------------------------------------------------
 
 --
@@ -43,6 +51,14 @@ CREATE TABLE `deposits` (
   `destino` int(11) NOT NULL,
   `monto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `deposits`
+--
+
+INSERT INTO `deposits` (`depositId`, `destino`, `monto`) VALUES
+(31, 1, 100),
+(32, 3, 100);
 
 -- --------------------------------------------------------
 
@@ -64,7 +80,8 @@ CREATE TABLE `transfers` (
 INSERT INTO `transfers` (`transferId`, `origen`, `destino`, `monto`) VALUES
 (1, 10, 11, 100),
 (2, 10, 11, 100),
-(3, 10, 11, 100);
+(3, 10, 11, 100),
+(4, 10, 11, 100);
 
 -- --------------------------------------------------------
 
@@ -81,6 +98,12 @@ CREATE TABLE `withdrawals` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `accounts`
+--
+ALTER TABLE `accounts`
+  ADD PRIMARY KEY (`accountId`);
 
 --
 -- Indexes for table `deposits`
@@ -108,13 +131,13 @@ ALTER TABLE `withdrawals`
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `depositId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `depositId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `transfers`
 --
 ALTER TABLE `transfers`
-  MODIFY `transferId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `transferId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `withdrawals`
