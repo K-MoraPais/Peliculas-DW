@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 05-06-2021 a las 00:58:16
--- Versión del servidor: 10.4.18-MariaDB
--- Versión de PHP: 8.0.3
+-- Host: 127.0.0.1
+-- Generation Time: Aug 06, 2021 at 02:44 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 7.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,41 +18,109 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `peliculas`
+-- Database: `database`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pelicula`
+-- Table structure for table `accounts`
 --
 
-CREATE TABLE `pelicula` (
-  `idPelicula` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `img` varchar(255) DEFAULT NULL,
-  `activo` tinyint(4) DEFAULT NULL
+CREATE TABLE `accounts` (
+  `accountId` int(11) NOT NULL,
+  `balance` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deposits`
+--
+
+CREATE TABLE `deposits` (
+  `depositId` int(11) NOT NULL,
+  `destino` int(11) NOT NULL,
+  `monto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transfers`
+--
+
+CREATE TABLE `transfers` (
+  `transferId` int(11) NOT NULL,
+  `origen` int(11) NOT NULL,
+  `destino` int(11) NOT NULL,
+  `monto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Índices para tablas volcadas
+-- Dumping data for table `transfers`
+--
+
+INSERT INTO `transfers` (`transferId`, `origen`, `destino`, `monto`) VALUES
+(1, 10, 11, 100),
+(2, 10, 11, 100),
+(3, 10, 11, 100);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `withdrawals`
+--
+
+CREATE TABLE `withdrawals` (
+  `withdrawalId` int(11) NOT NULL,
+  `origen` int(11) NOT NULL,
+  `monto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `pelicula`
+-- Indexes for table `deposits`
 --
-ALTER TABLE `pelicula`
-  ADD PRIMARY KEY (`idPelicula`);
+ALTER TABLE `deposits`
+  ADD PRIMARY KEY (`depositId`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- Indexes for table `transfers`
+--
+ALTER TABLE `transfers`
+  ADD PRIMARY KEY (`transferId`);
+
+--
+-- Indexes for table `withdrawals`
+--
+ALTER TABLE `withdrawals`
+  ADD PRIMARY KEY (`withdrawalId`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `pelicula`
+-- AUTO_INCREMENT for table `deposits`
 --
-ALTER TABLE `pelicula`
-  MODIFY `idPelicula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `deposits`
+  MODIFY `depositId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `transfers`
+--
+ALTER TABLE `transfers`
+  MODIFY `transferId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `withdrawals`
+--
+ALTER TABLE `withdrawals`
+  MODIFY `withdrawalId` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
