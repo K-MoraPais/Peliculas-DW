@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Deposit;
 use App\Models\Transfer;
 use App\Models\Withdrawal;
+use App\Models\Account;
 
 class ApiController extends Controller
 {
@@ -29,20 +30,31 @@ class ApiController extends Controller
         return response()->json($response, $code);
     }
 
-
     public function handler(Request $request)
     {
+
         $requestType = $request->input('tipo');
         switch ($requestType) {
+
             case 'deposito':
                 try {
+                    $Account = new Account();
                     $Deposit = new Deposit();
-                    $Deposit->heading = $request->input('destino');
-                    $Deposit->origin = $request->input('monto');
+                    $Deposit->destino = $request->input('destino');
+                    $Deposit->monto = $request->input('monto');
+                    if (!Account::where('accountId', $request->input('destino'))->exists()) {
+                        $Account->accountId = $request->input('destino');
+                        $Account->balance = $request->input('monto');
+                        $Account->save();
+                    }else{
+                        $Account =  Account::where('accountId', $request->input('destino'))->select('balance')->get();
+                        $accountBal = $Account[0].['balance'];
+                        Account::where('accountId', $request->input('destino'))->update(['balance' => $accountBal + $request->input('monto')]);
+                    }
                     $Deposit->save();
-                    return "Deposit";
-                } catch (\Illuminate\Database\QueryException $e) {
-                    return "Error";
+                    return 'Ok';
+                } catch (\Exception $e) {
+                    return $e;
                 }
                 break;
             case 'retiro':
