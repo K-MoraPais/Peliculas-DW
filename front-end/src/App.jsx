@@ -33,14 +33,15 @@ const App = () => {
 
   return (
     <>
-      <Header addMovieHandler={enableAddMovieHandler} getAllMoviesHandler={enableGetAllMovieHandler}/>
+      <Header
+        addMovieHandler={enableAddMovieHandler}
+        getAllMoviesHandler={enableGetAllMovieHandler}
+      />
       <div className={classes.content}>
         {addMovieEnabled && (
           <AddMovie addMovieHandler={enableAddMovieHandler} />
         )}
-        {getAllMoviesEnabled && (
-          <GetAllMovies getAllMoviesHandler={enableGetAllMovieHandler} />
-        )}
+        {getAllMoviesEnabled && <GetAllMovies />}
       </div>
     </>
   );

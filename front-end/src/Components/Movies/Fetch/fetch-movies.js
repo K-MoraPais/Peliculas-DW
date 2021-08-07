@@ -1,6 +1,8 @@
 import axios from 'axios'
+import { useEffect } from 'react';
 
 const FetchMovies = async ({ type, data }) => {
+
   if (type === 'GETALL') {
     const response = await axios.get('http://127.0.0.1:8000/api/getAll');
 
