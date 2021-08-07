@@ -11,5 +11,5 @@
 ## Frontend
 ##### 1. Change directory to Peliculas-DW/front-end
 ##### 2. Run npm i
-##### 3. One the installation is finished, run 'npm run start' to deploy the app (http://localhost:3000/) 
+##### 3. Once the installation is finished, run 'npm run start' to deploy the app (http://localhost:3000/) 
 ###### Jhon Aires, Kevin Mora
