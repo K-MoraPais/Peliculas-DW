@@ -1,9 +1,8 @@
 import classes from './GetAllMovies.module.scss';
-import FetchMovies from '../Fetch/fetch-movies';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const GetAllMovies = ({ enableGetAllMovieHandler }) => {
+const GetAllMovies = () => {
   const [movies, setMovies] = useState();
 
   useEffect(() => {
@@ -33,4 +32,5 @@ const GetAllMovies = ({ enableGetAllMovieHandler }) => {
 
   return <div className={classes.movieContainer}>{movies}</div>;
 };
+
 export default GetAllMovies;
