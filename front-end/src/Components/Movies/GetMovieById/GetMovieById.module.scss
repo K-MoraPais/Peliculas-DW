@@ -1,0 +1,133 @@
+.movie-container {
+  display: flex;
+  max-width: 80%;
+  background: #202020;
+  padding: 2rem;
+  border-radius: 10px;
+
+  .form {
+    padding: 0;
+    div {
+      display: flex;
+      flex-direction: column;
+
+      margin: 0;
+
+      label {
+        color: #ffffff;
+        font-size: larger;
+        margin: 0 0 10px;
+      }
+
+      input {
+        height: 1.5rem;
+        font-size: large;
+        border-radius: 2px;
+        border-width: 1px;
+        border-style: unset;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        &[type='number'] {
+          -moz-appearance: textfield;
+        }
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .error-text {
+        color: #b40e0e;
+      }
+
+      &.invalid {
+        label {
+          color: #b40e0e;
+        }
+
+        input {
+          border: 1px solid #b40e0e;
+          background-color: #fddddd;
+
+          &:focus {
+            border-color: #ff8800;
+            background-color: #fbe8d2;
+          }
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      margin: 0.5em 0 0 0;
+
+      button {
+        font: inherit;
+        color: #35bd3c;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        border-radius: 25px;
+        padding: 0.5rem 2rem;
+        transition: 300ms;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+
+      .add {
+        background-color: #35bd3c;
+        color: white;
+
+        &:hover {
+          background-color: #216625;
+          color: #35bd3c;
+        }
+
+        &:active {
+          background-color: #164619;
+        }
+
+        &:disabled,
+        &:disabled:hover,
+        &:disabled:active {
+          background-color: #8b8b8b;
+          color: #292929;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .single-movie {
+    display: flex;
+    margin: 0.5rem 0 0.5rem 0.5rem;
+    min-height: 6rem;
+    border-radius: 5px;
+    border: 0.5px solid #35bd3c;
+
+    div {
+      display: flex;
+      padding: 0.3rem;
+
+      .title {
+        height: min-content;
+        color: #ffffff;
+        margin: 0 0 3.5rem 0.5rem;
+        border-bottom: 1px solid #216625;
+      }
+    }
+
+    .image {
+      height: 6rem;
+      width: 6rem;
+      margin: 0;
+    }
+  }
+}
