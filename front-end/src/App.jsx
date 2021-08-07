@@ -2,6 +2,7 @@ import { useState } from 'react';
 import classes from './App.module.scss';
 import Header from './Components/Header/Header';
 import AddMovie from './Components/Movies/AddMovie/AddMovie';
+import GetAllMovies from './Components/Movies/GetMovies/GetAllMovies';
 
 const App = () => {
   const [addMovieEnabled, setAddMovieEnabled] = useState(false);
@@ -31,11 +32,15 @@ const App = () => {
 
   return (
     <>
-      <Header addMovieHandler={enableAddMovieHandler} />
+      <Header
+        addMovieHandler={enableAddMovieHandler}
+        getAllMoviesHandler={enableGetAllMovieHandler}
+      />
       <div className={classes.content}>
         {addMovieEnabled && (
           <AddMovie addMovieHandler={enableAddMovieHandler} />
         )}
+        {getAllMoviesEnabled && <GetAllMovies />}
       </div>
     </>
   );

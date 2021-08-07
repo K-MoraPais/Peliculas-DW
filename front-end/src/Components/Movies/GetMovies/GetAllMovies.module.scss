@@ -1,0 +1,33 @@
+.movieContainer {
+  width: 50%;
+  background: #202020;
+  padding: 2rem;
+  border-radius: 10px;
+
+  .singleMovie {
+    display: flex;
+
+    margin: 0.5rem 0 0.5rem 0;
+    min-height: 6rem;
+    border-radius: 5px;
+    border: 0.5px solid #35bd3c;
+    div {
+      display: flex;
+
+      padding: 0.3rem;
+
+      .title {
+        height: min-content;
+        color: #ffffff;
+        margin: 0 0 3.5rem 0.5rem;
+        border-bottom: 1px solid #216625;
+      }
+    }
+
+    .image {
+      height: 6rem;
+      width: 6rem;
+      margin: 0;
+    }
+  }
+}
