@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import useInput from '../../../Hooks/use-inputs';
 
+import FetchMovies from '../Fetch/fetch-movies';
+
 import classes from './AddMovie.module.scss';
 
 const isNotEmpty = (value) => value.trim() !== '';
@@ -34,10 +36,17 @@ const AddMovie = ({ addMovieHandler }) => {
     }
   }, [enteredImageIsValid, enteredNameIsValid]);
 
-  const submitFormHandler = (event) => {
+  const submitFormHandler = async (event) => {
     event.preventDefault();
-    console.log(enteredImage);
-    console.log(enteredName);
+
+    const res = await FetchMovies({
+      type: 'ADD',
+      data: { nombre: `${enteredName.trim()}`, img: `${enteredImage}` },
+    });
+
+    if (res.data === 'Pelicula ingresada correctamente') {
+      console.log(res.data);
+    }
 
     nameInputReset();
     imageInputReset();

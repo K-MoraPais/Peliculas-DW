@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-06-2021 a las 00:58:16
+-- Tiempo de generación: 07-08-2021 a las 03:07:37
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.3
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `pelicula` (
   `idPelicula` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
-  `img` varchar(255) DEFAULT NULL,
+  `img` varchar(10000) DEFAULT NULL,
   `activo` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -52,7 +52,7 @@ ALTER TABLE `pelicula`
 -- AUTO_INCREMENT de la tabla `pelicula`
 --
 ALTER TABLE `pelicula`
-  MODIFY `idPelicula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idPelicula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
