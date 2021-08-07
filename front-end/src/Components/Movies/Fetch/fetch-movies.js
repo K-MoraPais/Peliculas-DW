@@ -22,7 +22,7 @@ const FetchMovies = async ({ type, data }) => {
   }
 
   if (type === 'ADD') {
-    const response = await axios.post('http://127.0.0.1:8000/api/store', { nombre: data.name, img: data.image });
+    const response = await axios.post('http://127.0.0.1:8000/api/store', { nombre: data.nombre, img: data.img });
 
     if (response.status !== 200) {
       return 'error';

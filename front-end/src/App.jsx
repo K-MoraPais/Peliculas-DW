@@ -2,7 +2,6 @@ import { useState } from 'react';
 import classes from './App.module.scss';
 import Header from './Components/Header/Header';
 import AddMovie from './Components/Movies/AddMovie/AddMovie';
-import FetchMovies from './Components/Movies/Fetch/fetch-movies';
 
 const App = () => {
   const [addMovieEnabled, setAddMovieEnabled] = useState(false);
