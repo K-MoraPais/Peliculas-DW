@@ -1,27 +1,32 @@
 import classes from "./GetAllMovies.module.scss";
+import FetchMovies from "../Fetch/fetch-movies";
+import { useEffect } from "react";
 
-const response = [
-  { img: "A", nombre: "nombre" },
-  { img: "B", nombre: "nombre" },
-  { img: "C", nombre: "nombre" },
-  { img: "D", nombre: "nombre" },
-  { img: "E", nombre: "nombre" },
-  { img: "F", nombre: "nombre" },
-  { img: "G", nombre: "nombre" },
-  { img: "H", nombre: "nombre" },
-
-];
 const GetAllMovies = ({ enableGetAllMovieHandler }) => {
-  enableGetAllMovieHandler = (
-    <div className={classes.movieContainer}>
-      {response.map((movies) => (
-        <div className={classes.singleMovie} key={movies}>
-          {movies.img}
-        </div>
-      ))}
-    </div>
-  );
+  let movies;
 
-  return enableGetAllMovieHandler;
+  const test = async () => {
+    const response = await FetchMovies({ type: 'GETALL' });
+    return response.data;
+  };
+
+  const fetchMovies = async () => {
+    const objectArray = await test();
+
+    const movies = objectArray.map((movie, index) => {
+      return (
+        <div className={classes.singleMovie} key={index}>
+          {movie.nombre}
+        </div>
+      );
+    });
+
+    return movies;
+  };
+  useEffect(() => {
+    movies = fetchMovies();
+  }, [movies]);
+
+  return <div className={classes.movieContainer}>{movies}</div>;
 };
 export default GetAllMovies;
