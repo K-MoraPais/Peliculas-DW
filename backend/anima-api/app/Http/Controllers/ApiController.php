@@ -48,7 +48,7 @@ class ApiController extends Controller
                         $Account->save();
                     }else{
                         $Account =  Account::where('accountId', $request->input('destino'))->select('balance')->get();
-                        $accountBal = $Account[0].['balance'];
+                        $accountBal =  $Account[0]->balance;
                         Account::where('accountId', $request->input('destino'))->update(['balance' => $accountBal + $request->input('monto')]);
                     }
                     $Deposit->save();
