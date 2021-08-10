@@ -47,13 +47,15 @@ class ApiController extends Controller
                         $Account->balance = $request->input('monto');
                         $Account->save();
                         $Deposit->save();
-                        return $this->sendResponse("OK", "Account created", 201);
+                        $currentBal = Account::where('accountId', $request->input('destino'))->select('balance')->get()[0]->balance;
+                        return $this->sendResponse($request->input('destino') . ' , ' . $currentBal, "Account created", 201);
                     } else {
                         $Account =  Account::where('accountId', $request->input('destino'))->select('balance')->get();
                         $accountBal =  $Account[0]->balance;
                         Account::where('accountId', $request->input('destino'))->update(['balance' => $accountBal + $request->input('monto')]);
                         $Deposit->save();
-                        return $this->sendResponse("OK", "Normal deposit", 200);
+                        $currentBal = Account::where('accountId', $request->input('destino'))->select('balance')->get()[0]->balance;
+                        return $this->sendResponse($request->input('destino') . ' , ' . $currentBal, "Normal deposit", 200);
                     }
                 } catch (\Exception $e) {
                     return $e;
@@ -62,7 +64,6 @@ class ApiController extends Controller
             case 'retiro':
                 try {
                     $Withdrawal = new Withdrawal();
-                    $Account = new Account();
                     $Withdrawal->origen = $request->input('origen');
                     $Withdrawal->monto = $request->input('monto');
                     if (!Account::where('accountId', $request->input('origen'))->exists()) {
@@ -70,7 +71,7 @@ class ApiController extends Controller
                     } else {
                         $Account =  Account::where('accountId', $request->input('origen'))->select('balance')->get();
                         $accountBal =  $Account[0]->balance;
-                        if ($accountBal < $request->input('monto')){
+                        if ($accountBal < $request->input('monto')) {
                             return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 404);
                         }
                         Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
@@ -88,6 +89,19 @@ class ApiController extends Controller
                     $Transfer->destino = $request->input('destino');
                     $Transfer->origen = $request->input('origen');
                     $Transfer->monto = $request->input('monto');
+                    if (!Account::where('accountId', $request->input('origen'))->exists()) {
+                        return $this->sendResponse("Error", "Origin does not exist", 404);
+                    } else {
+                        $Account =  Account::where('accountId', $request->input('origen'))->select('balance')->get();
+                        $accountBal =  $Account[0]->balance;
+                        if ($accountBal < $request->input('monto')) {
+                            return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 404);
+                        }
+                        Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
+                        $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
+                        $Withdrawal->save();
+                        return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
+                    }
                     $Transfer->save();
                     return "Transfer";
                 } catch (\Illuminate\Database\QueryException $e) {
