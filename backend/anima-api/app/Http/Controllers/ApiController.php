@@ -99,7 +99,6 @@ class ApiController extends Controller
                         }
                         Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
                         $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
-                        $Withdrawal->save();
                         return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
                     }
                     $Transfer->save();
