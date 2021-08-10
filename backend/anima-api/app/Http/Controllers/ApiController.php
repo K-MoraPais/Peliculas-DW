@@ -63,7 +63,7 @@ class ApiController extends Controller
                 try {
                     $Withdrawal = new Withdrawal();
                     $Account = new Account();
-                    $Withdrawal->origin = $request->input('origen');
+                    $Withdrawal->origen = $request->input('origen');
                     $Withdrawal->monto = $request->input('monto');
                     if (!Account::where('accountId', $request->input('origen'))->exists()) {
                         return $this->sendResponse("Error", "Origin does not exist", 404);
@@ -71,15 +71,15 @@ class ApiController extends Controller
                         $Account =  Account::where('accountId', $request->input('origen'))->select('balance')->get();
                         $accountBal =  $Account[0]->balance;
                         if ($accountBal < $request->input('monto')){
-                            return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 409);
+                            return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 404);
                         }
                         Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
-                        return $this->sendResponse("OK", "Withdrawal successful", 200);
+                        $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
+                        $Withdrawal->save();
+                        return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
                     }
-                    $Withdrawal->save();
-                    return "Withdrawal";
                 } catch (\Exception $e) {
-                    return "a";
+                    return $e;
                 }
                 break;
             case 'transferir':
