@@ -62,8 +62,20 @@ class ApiController extends Controller
             case 'retiro':
                 try {
                     $Withdrawal = new Withdrawal();
+                    $Account = new Account();
                     $Withdrawal->origin = $request->input('origen');
                     $Withdrawal->monto = $request->input('monto');
+                    if (!Account::where('accountId', $request->input('origen'))->exists()) {
+                        return $this->sendResponse("Error", "Origin does not exist", 404);
+                    } else {
+                        $Account =  Account::where('accountId', $request->input('origen'))->select('balance')->get();
+                        $accountBal =  $Account[0]->balance;
+                        if ($accountBal < $request->input('monto')){
+                            return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 409);
+                        }
+                        Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
+                        return $this->sendResponse("OK", "Withdrawal successful", 200);
+                    }
                     $Withdrawal->save();
                     return "Withdrawal";
                 } catch (\Exception $e) {
