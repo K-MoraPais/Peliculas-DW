@@ -10,17 +10,17 @@ use App\Models\Account;
 
 class ApiController extends Controller
 {
-    public function sendResponse($result, $message)
+    function sendResponse($result, $message, $code)
     {
         $response = [
             "success" => true,
             "data" => $result,
             "message" => $message
         ];
-        return response()->json($response, 200);
+        return response()->json($response, $code);
     }
 
-    public function sendError($error, $errorMessages = [], $code = 404)
+    function sendError($error, $errorMessages = [], $code = 404)
     {
         $response = [
             "success" => false,
@@ -30,7 +30,7 @@ class ApiController extends Controller
         return response()->json($response, $code);
     }
 
-    public function handler(Request $request)
+    function handler(Request $request)
     {
 
         $requestType = $request->input('tipo');
@@ -46,13 +46,15 @@ class ApiController extends Controller
                         $Account->accountId = $request->input('destino');
                         $Account->balance = $request->input('monto');
                         $Account->save();
-                    }else{
+                        $Deposit->save();
+                        return $this->sendResponse("OK", "Account created", 201);
+                    } else {
                         $Account =  Account::where('accountId', $request->input('destino'))->select('balance')->get();
                         $accountBal =  $Account[0]->balance;
                         Account::where('accountId', $request->input('destino'))->update(['balance' => $accountBal + $request->input('monto')]);
+                        $Deposit->save();
+                        return $this->sendResponse("OK", "Normal deposit", 200);
                     }
-                    $Deposit->save();
-                    return 'Ok';
                 } catch (\Exception $e) {
                     return $e;
                 }
@@ -88,6 +90,6 @@ class ApiController extends Controller
         $Deposit = Deposit::where('idDeposit', $id)
             ->select('idDeposit', 'nombre', 'img')
             ->get();
-        return $this->sendResponse($Deposit, "Deposit obtenida correctamente");
+        return $this->sendResponse($Deposit, "Deposit obtenida correctamente", 200);
     }
 }
