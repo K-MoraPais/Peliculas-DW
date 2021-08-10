@@ -20,15 +20,6 @@ class ApiController extends Controller
         return response()->json($response, $code);
     }
 
-    function sendError($error, $errorMessages = [], $code = 404)
-    {
-        $response = [
-            "success" => false,
-            "error" => $error,
-            "errorMessages" => $errorMessages
-        ];
-        return response()->json($response, $code);
-    }
 
     function handler(Request $request)
     {
@@ -89,16 +80,17 @@ class ApiController extends Controller
                     $Transfer->destino = $request->input('destino');
                     $Transfer->origen = $request->input('origen');
                     $Transfer->monto = $request->input('monto');
-                    if (!Account::where('accountId', $request->input('origen'))->exists()) {
-                        return $this->sendResponse("Error", "Origin does not exist", 404);
+                    if (Account::where('accountId', $request->input('origen'))->doesntExist() || Account::where('accountId', $request->input('destino'))->doesntExist()) {
+                        return $this->sendResponse("Error", "Account does not exist", 404);
                     } else {
-                        $Account =  Account::where('accountId', $request->input('origen'))->select('balance')->get();
-                        $accountBal =  $Account[0]->balance;
-                        if ($accountBal < $request->input('monto')) {
-                            return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 404);
+                        $originAccountBal =  Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
+                        $targetAccountBal = Account::where('accountId', $request->input('destino'))->select('balance')->get()[0]->balance;
+                        if ($originAccountBal < $request->input('monto')) {
+                            return $this->sendResponse("Error", "Transfer amount exceeds account balance", 404);
                         }
-                        Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
+                       // Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
                         $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
+
                         return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
                     }
                     $Transfer->save();
