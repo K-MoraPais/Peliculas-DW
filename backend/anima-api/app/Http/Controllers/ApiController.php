@@ -26,23 +26,26 @@ class ApiController extends Controller
 
         $requestType = $request->input('tipo');
         switch ($requestType) {
-
+            case 'crear':
+                if (Account::where('email', $request->input('email'))->select('balance')->exists()) {
+                    return $this->sendResponse("", "Email is already in use", 404);
+                }
+                $Account = new Account();
+                $Account->email = $request->input('email');
+                $Account->balance = 0;
+                $Account->save();
+                $newAccountId = Account::where('email', $request->input('email'))->select('accountId')->get()[0]->accountId;
+                return $this->sendResponse($newAccountId, "Account created", 201);
+                break;
             case 'deposito':
                 try {
-                    $Account = new Account();
                     $Deposit = new Deposit();
                     $Deposit->destino = $request->input('destino');
                     $Deposit->monto = $request->input('monto');
                     if (!Account::where('accountId', $request->input('destino'))->exists()) {
-                        $Account->accountId = $request->input('destino');
-                        $Account->balance = $request->input('monto');
-                        $Account->save();
-                        $Deposit->save();
-                        $currentBal = Account::where('accountId', $request->input('destino'))->select('balance')->get()[0]->balance;
-                        return $this->sendResponse($request->input('destino') . ' , ' . $currentBal, "Account created", 201);
+                        return $this->sendResponse("Error", "Account does not exist", 404);
                     } else {
-                        $Account =  Account::where('accountId', $request->input('destino'))->select('balance')->get();
-                        $accountBal =  $Account[0]->balance;
+                        $accountBal =  Account::where('accountId', $request->input('destino'))->select('balance')->get()[0]->balance;
                         Account::where('accountId', $request->input('destino'))->update(['balance' => $accountBal + $request->input('monto')]);
                         $Deposit->save();
                         $currentBal = Account::where('accountId', $request->input('destino'))->select('balance')->get()[0]->balance;
@@ -59,17 +62,18 @@ class ApiController extends Controller
                     $Withdrawal->monto = $request->input('monto');
                     if (!Account::where('accountId', $request->input('origen'))->exists()) {
                         return $this->sendResponse("Error", "Origin does not exist", 404);
-                    } else {
-                        $Account =  Account::where('accountId', $request->input('origen'))->select('balance')->get();
-                        $accountBal =  $Account[0]->balance;
-                        if ($accountBal < $request->input('monto')) {
-                            return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 404);
-                        }
-                        Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
-                        $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
-                        $Withdrawal->save();
-                        return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
                     }
+                    $accountBal =  Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
+                    if ($accountBal < $request->input('monto')) {
+                        return $this->sendResponse("Error", "Withdrawal amount exceeds account balance", 404);
+                    }
+                    if($request->input('monto') < 1000){
+                    Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
+                    $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
+                    $Withdrawal->save();
+                    return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
+                    }
+                    
                 } catch (\Exception $e) {
                     return $e;
                 }
@@ -118,4 +122,3 @@ class ApiController extends Controller
         return $this->sendResponse($Deposit, "Deposit obtenida correctamente", 200);
     }
 }
-
