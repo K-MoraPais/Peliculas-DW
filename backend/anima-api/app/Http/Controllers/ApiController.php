@@ -99,7 +99,7 @@ class ApiController extends Controller
                             'balance' => $targetAccountBal + $request->input('monto')
                         ];
                         $dataBody = [$accountOne, $accountTwo];
-                        return $this->sendResponse($dataBody, "Withdrawal successful", 200);
+                        return $this->sendResponse($dataBody, "Transfer successful", 200);
                     }
                     $Transfer->save();
                     return "Transfer";
