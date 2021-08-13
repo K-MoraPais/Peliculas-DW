@@ -88,10 +88,18 @@ class ApiController extends Controller
                         if ($originAccountBal < $request->input('monto')) {
                             return $this->sendResponse("Error", "Transfer amount exceeds account balance", 404);
                         }
-                       // Account::where('accountId', $request->input('origen'))->update(['balance' => $accountBal - $request->input('monto')]);
-                        $currentBal = Account::where('accountId', $request->input('origen'))->select('balance')->get()[0]->balance;
-
-                        return $this->sendResponse($request->input('origen') . ' , ' . $currentBal, "Withdrawal successful", 200);
+                        Account::where('accountId', $request->input('origen'))->update(['balance' => $originAccountBal - $request->input('monto')]);
+                        Account::where('accountId', $request->input('destino'))->update(['balance' => $targetAccountBal + $request->input('monto')]);
+                        $accountOne = (object)[
+                            'id' => $request->input('origen'),
+                            'balance' => $originAccountBal - $request->input('monto')
+                        ];
+                        $accountTwo = (object)[
+                            'id' => $request->input('destino'),
+                            'balance' => $targetAccountBal + $request->input('monto')
+                        ];
+                        $dataBody = [$accountOne, $accountTwo];
+                        return $this->sendResponse($dataBody, "Withdrawal successful", 200);
                     }
                     $Transfer->save();
                     return "Transfer";
@@ -110,3 +118,4 @@ class ApiController extends Controller
         return $this->sendResponse($Deposit, "Deposit obtenida correctamente", 200);
     }
 }
+
